@@ -149,4 +149,46 @@ public class UserRepositoryTests {
         assertThat(findedUser).isNotNull();
 
     }
+
+    // Junit Test for find user by username(native query)
+    @DisplayName("Junit Test for find user by username(native query)")
+    @Test
+    public void givenUsername_whenfindUserByUsername_thenReturnUser() {
+
+        // given - precondition or setup
+        String username = user.getUsername();
+        userRepository.save(user);
+
+        // when - action or behavior that we are going test
+        User findedUser = userRepository.findUserByUsername(username).get();
+
+        // then - verify the output
+        assertThat(findedUser).isNotNull();
+
+    }
+
+    // Junit Test for find user by first name
+    @DisplayName("Junit Test for find user by first name(jpql query)")
+    @Test
+    public void givenUserList_whenfindUserByFirstName_thenReturnUserList() {
+
+        // given - precondition or setup
+        User newUser = new User();
+        newUser.setEmail("newuser@email.com");
+        newUser.setUsername("new_user");
+        newUser.setPassword("password");
+        newUser.setFirstName("john");
+        newUser.setLastName("james");
+
+        this.userRepository.save(user);
+        this.userRepository.save(newUser);
+
+        // when - action or behavior that we are going test
+        List<User> userList = userRepository.findUserByFirstName("john");
+
+        // then - verify the output
+        assertThat(userList).isNotEmpty();
+        assertThat(userList.size()).isEqualTo(2);
+
+    }
 }
