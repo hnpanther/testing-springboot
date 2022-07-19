@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 public class JWTUtil {
 
-    private static final long EXPIRE_DATE = 1*60*60*1000;
+    private static final long EXPIRE_DATE = 60*60*60*1000;
 
     @Value("${securiry.jwt.secret}")
     private String secretKey;
@@ -28,11 +28,13 @@ public class JWTUtil {
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
-    //editing...
     public boolean validateToken(String token) {
-        String username = getUsernameFromToken(token);
-        Date date = getExpireDateFromToken(token);
-        return true;
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return getExpireDateFromToken(token).after(new Date());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public String getUsernameFromToken(String token) {

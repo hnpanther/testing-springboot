@@ -1,6 +1,7 @@
 package com.hnp.testingspringboot.entity;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -124,7 +125,20 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        for(Permission p: this.permissions) {
+            authorities.add(new SimpleGrantedAuthority(p.getPermissionName()));
+        }
+
+        for(Role r: roles) {
+            authorities.add(new SimpleGrantedAuthority(r.getRoleName()));
+            for(Permission p: r.getPermissions()) {
+                authorities.add(new SimpleGrantedAuthority(p.getPermissionName()));
+            }
+        }
+
+
+        return authorities;
     }
 
     @Override

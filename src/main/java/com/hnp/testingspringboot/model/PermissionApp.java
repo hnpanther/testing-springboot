@@ -1,4 +1,4 @@
-package com.hnp.testingspringboot.security.model;
+package com.hnp.testingspringboot.model;
 
 public enum PermissionApp {
 

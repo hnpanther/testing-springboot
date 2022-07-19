@@ -25,6 +25,10 @@ public class Permission {
     public Permission() {
     }
 
+    public Permission(String permissionName) {
+        this.permissionName = permissionName;
+    }
+
     public Long getId() {
         return id;
     }
