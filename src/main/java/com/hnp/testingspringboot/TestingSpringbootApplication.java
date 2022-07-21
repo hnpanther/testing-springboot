@@ -3,14 +3,15 @@ package com.hnp.testingspringboot;
 import com.hnp.testingspringboot.entity.Permission;
 import com.hnp.testingspringboot.entity.Role;
 import com.hnp.testingspringboot.entity.User;
+import com.hnp.testingspringboot.model.PermissionApp;
 import com.hnp.testingspringboot.repository.PermissionRepostory;
 import com.hnp.testingspringboot.repository.RoleRepository;
 import com.hnp.testingspringboot.repository.UserRepository;
-import com.hnp.testingspringboot.model.PermissionApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
+@EnableJpaRepositories(basePackages = "com.hnp.testingspringboot.repository")
 public class TestingSpringbootApplication implements CommandLineRunner {
 
     @Autowired
