@@ -2,9 +2,9 @@ package com.hnp.testingspringboot.controller;
 
 
 import com.hnp.testingspringboot.entity.User;
-import com.hnp.testingspringboot.security.jwt.JWTUtil;
 import com.hnp.testingspringboot.model.AuthRequest;
 import com.hnp.testingspringboot.model.JWTResponse;
+import com.hnp.testingspringboot.security.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,6 +43,7 @@ public class AuthController {
 
 
         String token = this.jwtUtil.generateToken((User) authenticate.getPrincipal());
+
 
 
         return ResponseEntity.ok(new JWTResponse(token));

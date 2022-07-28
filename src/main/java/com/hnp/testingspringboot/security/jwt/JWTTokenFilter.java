@@ -40,7 +40,7 @@ public class JWTTokenFilter extends OncePerRequestFilter {
 
         String token = authHeader.split(" ")[1].trim();
 
-        if(!jwtUtil.validateToken(token)) {
+        if(!jwtUtil.validateTokenForAccess(token)) {
             filterChain.doFilter(request, response);
             return;
         }

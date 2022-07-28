@@ -12,4 +12,5 @@ public interface TokenStoreRepository extends CrudRepository<TokenStore, String>
 
 
     Optional<TokenStore> findByUsername(String s);
+
 }
