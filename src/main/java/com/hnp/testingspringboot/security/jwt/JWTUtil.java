@@ -38,10 +38,9 @@ public class JWTUtil {
         TokenStore tokenStore = getTokenStroe(user);
 
         if(tokenStore != null) {
-            System.out.println("part1= " + tokenStore.getToken());
             return tokenStore.getToken();
         }
-        System.out.println("part2=  token store is null");
+
 
         Map<String, Object> claims = new HashMap<>();
         Date expireDate = new Date(System.currentTimeMillis() + EXPIRE_DATE);
@@ -55,7 +54,6 @@ public class JWTUtil {
         newTokenStore.setUsername(user.getUsername());
         newTokenStore.setExpireDate(expireDate);
         this.tokenStoreRepository.save(newTokenStore);
-        System.out.println("part3= " + newTokenStore.getToken());
         return token;
     }
 
@@ -101,7 +99,6 @@ public class JWTUtil {
         TokenStore tokenStore = tokenStoreOptional.get();
 
         String token = tokenStore.getToken();
-        System.out.println(token);
 
         if(validateToken(token)) {
             return tokenStore;
