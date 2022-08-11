@@ -22,15 +22,18 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+
     @Autowired
     private JWTUtil jwtUtil;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
 
+
         if(authRequest.getUsername() == null || authRequest.getPassword() == null) {
             return ResponseEntity.badRequest().build();
         }
+
 
         Authentication authenticate = null;
         try {
@@ -38,9 +41,11 @@ public class AuthController {
                     authRequest.getUsername(),
                     authRequest.getPassword()));
         } catch (Exception e) {
+            System.out.println("exception in login controller");
+            e.printStackTrace();
             return ResponseEntity.status(401).build();
         }
-
+        System.out.println("everything ok");
 
         String token = this.jwtUtil.generateToken((User) authenticate.getPrincipal());
 
