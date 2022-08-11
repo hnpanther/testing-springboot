@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -24,9 +22,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -34,13 +29,10 @@ public class SecurityConfiguration {
 
     @Autowired
     private JWTTokenFilter jwtTokenFilter;
-
     @Autowired
     private LdapAuthProvider ldapAuthProvider;
-
     @Autowired
     private CustomAuthProvider customAuthProvider;
-
     @Autowired
     private UserService userService;
 
@@ -61,26 +53,27 @@ public class SecurityConfiguration {
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests().antMatchers("/api/test/**", "/auth/**", "/h2-console/**").permitAll()
                 .and().authorizeRequests().anyRequest().authenticated()
-                .and().addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-//        http.authenticationProvider(customAuthProvider);
-//        http.authenticationProvider(ldapAuthProvider);
+                .and().addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .apply(CustomDsl.customDsl());
+        http.authenticationProvider(customAuthProvider);
+        http.authenticationProvider(ldapAuthProvider);
         return http.build();
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(
-//            AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        List<AuthenticationProvider> authenticationProviders = new ArrayList<>();
-        authenticationProviders.add(ldapAuthProvider);
-        authenticationProviders.add(customAuthProvider);
-        authenticationProviders.add(daoAuthenticationProvider());
-        return new ProviderManager(authenticationProviders);
+        return authenticationConfiguration.getAuthenticationManager();
     }
+//    @Bean
+//    public AuthenticationManager authenticationManager(
+//            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        List<AuthenticationProvider> authenticationProviders = new ArrayList<>();
+//        authenticationProviders.add(ldapAuthProvider);
+//        authenticationProviders.add(customAuthProvider);
+//        authenticationProviders.add(daoAuthenticationProvider());
+//        return new ProviderManager(authenticationProviders);
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
